@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "id": 1761329876088,
+      "name": "ana banan",
+      "phone": "987654321",
+      "password": "$2a$10$Qn6NJfoXLRqUOr8v6IbEeeQDZUJpaPtRdIyfL6P2E73AqWxjZM91u"
+    },
+    {
+      "id": "61e528e0-6a4f-4e83-927c-b6dab361429c",
+      "name": "pelusa",
+      "phone": "999666333",
+      "password": "$2a$10$vC3Vc5PBpeKnXWSOGAUM9enJ24t1ontweHPoQCsBhSk4aHi1nfwN2"
+    }
+  ]
+}

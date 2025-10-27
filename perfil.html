@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mi Perfil - Club Campestre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo">CC</div>
+        <div>
+          <div style="font-weight:800">Club Campestre</div>
+          <div style="font-size:13px;color:var(--muted)">Naturaleza · Deporte · Familia</div>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="eventos.html">Eventos</a></li>
+          <li><a href="galeria.html">Galería</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="login.html">Iniciar Sesión</a></li>
+        </ul>
+      </nav>
+      <button class="hamburger" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section id="perfil" style="padding:28px 6%">
+      <div style="max-width: 600px; margin: auto;">
+        <div class="card">
+          <h2>Mi Perfil</h2>
+          <div id="profile-info">
+            <p><strong>Nombre:</strong> <span id="profile-name">Cargando...</span></p>
+            <p><strong>Número de Celular:</strong> <span id="profile-phone">Cargando...</span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div>
+        <strong>Club Campestre</strong>
+        <div style="color:var(--muted);font-size:14px">© 2025 Club Campestre · Todos los derechos reservados</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <a href="#" style="color:inherit;text-decoration:none">Términos</a>
+        <a href="#" style="color:inherit;text-decoration:none">Privacidad</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js" defer></script>
+
+</body>
+</html>

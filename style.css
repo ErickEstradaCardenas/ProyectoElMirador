@@ -1,0 +1,125 @@
+:root{
+  --green:#0f9d58;
+  --dark:#0b2a1a;
+  --muted:#6b7280;
+  --card:#ffffffaa;
+  --glass: rgba(255,255,255,0.08);
+  font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#f6fbf7 0%,#eaf6ee 100%);color:#05261a;line-height:1.5}
+header{backdrop-filter: blur(6px);position:sticky;top:0;z-index:40}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:transparent}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:48px;height:48px;border-radius:10px;background:var(--green);display:flex;align-items:center;justify-content:center;color:white;font-weight:800}
+nav ul{display:flex;gap:18px;list-style:none;padding:0;margin:0}
+nav a{color:var(--dark);text-decoration:none;font-weight:600;transition: color 0.3s ease, border-bottom 0.3s ease;}
+nav a.active {
+  color: var(--green);
+  font-weight: 800;
+  border-bottom: 2px solid var(--green);
+  padding-bottom: 2px;
+}
+.hero{display:grid;grid-template-columns:1fr;gap:24px;padding:48px 6%;align-items:center}
+.hero-inner{display:flex;flex-direction:column;gap:18px;max-width:720px}
+.kicker{display:inline-block;background:var(--green);color:white;padding:6px 12px;border-radius:999px;font-weight:700}
+h1{font-size:clamp(28px,4.5vw,44px);margin:0}
+p.lead{color:var(--muted);font-size:18px}
+.cta{display:inline-block;background:var(--dark);color:white;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:700}
+.amenities{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:12px}
+.card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(8,16,12,0.06)}
+.card{transition: transform 0.3s ease, box-shadow 0.3s ease;}
+.card:hover{
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(8,16,12,0.1);
+}
+.media{border-radius:12px;overflow:hidden;height:360px;background-position:center;background-size:cover}
+.two-cols{display:grid;grid-template-columns:1fr 420px;gap:24px}
+.events li{margin-bottom:12px}
+footer{background:#06261a;color:#cfe9d8;padding:28px 6%;margin-top:32px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+form{display:grid;gap:10px}
+input,textarea,select{padding:10px;border-radius:8px;border:1px solid #e6eaea}
+.btn{background:var(--green);color:white;padding:10px 14px;border-radius:10px;border:none;font-weight:700;cursor:pointer}
+.gallery{display:flex;gap:8px;flex-wrap:wrap}
+.gallery img{width:calc(33.333% - 5px);border-radius:8px;object-fit:cover;height:120px}
+@media (max-width:900px){.two-cols{grid-template-columns:1fr}.media{height:220px}}
+
+/* --- Estilos para la página de Galería --- */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.gallery-grid img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(8,16,12,0.08);
+}
+
+/* --- Estilos para páginas de Login y Registro --- */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px 6%;
+  min-height: calc(100vh - 200px); /* Ajusta para que ocupe la pantalla menos header/footer */
+}
+.auth-card {
+  max-width: 400px;
+  width: 100%;
+}
+.auth-card h2 {
+  text-align: center;
+}
+.auth-card .btn {
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* --- Estilos para Menú Móvil --- */
+.hamburger {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001; /* Asegura que esté por encima de todo */
+}
+
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px auto;
+  background-color: var(--dark);
+  transition: all 0.3s ease-in-out;
+}
+
+@media (max-width: 560px) {
+  .hamburger {
+    display: block;
+  }
+
+  nav ul {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(246, 251, 247, 0.95);
+    backdrop-filter: blur(4px);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  nav ul.show {
+    display: flex;
+  }
+}
