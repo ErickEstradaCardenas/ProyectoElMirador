@@ -23,7 +23,13 @@ const readDB = async () => {
       return { users: [] };
     }
     const data = await fs.promises.readFile(DB_FILE, 'utf-8');
-    return JSON.parse(data);
+    // Si el archivo está vacío, retornamos una estructura por defecto.
+    if (!data) {
+      return { users: [] };
+    }
+    const parsedData = JSON.parse(data);
+    // Asegurarse de que siempre haya un array de usuarios
+    return { users: [], ...parsedData };
   } catch (error) {
     console.error('Error reading database:', error);
     // Propagate the error to be handled by the endpoint

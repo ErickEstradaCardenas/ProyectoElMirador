@@ -2,3 +2,4 @@
 node_modules
 # Ignorar el archivo de variables de entorno
 .env
+/nbproject/private/
