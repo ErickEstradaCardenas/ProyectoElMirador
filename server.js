@@ -20,16 +20,16 @@ app.use(express.json()); // Permite al servidor entender JSON
 const readDB = async () => {
   try {
     if (!fs.existsSync(DB_FILE)) {
-      return { users: [] };
+      return { users: [], reservations: [] };
     }
     const data = await fs.promises.readFile(DB_FILE, 'utf-8');
-    // Si el archivo está vacío, retornamos una estructura por defecto.
-    if (!data) {
-      return { users: [] };
+    // Si el archivo está vacío o solo contiene espacios, retornamos una estructura por defecto.
+    if (!data.trim()) {
+      return { users: [], reservations: [] };
     }
     const parsedData = JSON.parse(data);
     // Asegurarse de que siempre haya un array de usuarios
-    return { users: [], ...parsedData };
+    return { users: [], reservations: [], ...parsedData }; // Asegura que `users` y `reservations` siempre existan
   } catch (error) {
     console.error('Error reading database:', error);
     // Propagate the error to be handled by the endpoint
@@ -135,6 +135,32 @@ app.get('/profile', authMiddleware, async (req, res) => {
   } catch (error) {
     console.error('Profile fetch error:', error);
     res.status(500).json({ message: 'Error interno del servidor.' });
+  }
+});
+
+// Endpoint para crear una nueva reserva (protegido)
+app.post('/reservations', authMiddleware, async (req, res) => {
+  try {
+    const { service, reservationDate } = req.body;
+    if (!service || !reservationDate) {
+      return res.status(400).json({ message: 'Todos los campos son obligatorios.' });
+    }
+
+    const db = await readDB();
+    const newReservation = {
+      id: uuidv4(),
+      userId: req.user.id, // ID del usuario que viene del token
+      service,
+      reservationDate,
+      status: 'pendiente'
+    };
+    db.reservations.push(newReservation);
+    await writeDB(db);
+
+    res.status(201).json({ message: 'Reserva realizada con éxito. Nos pondremos en contacto para confirmar.' });
+  } catch (error) {
+    console.error('Reservation error:', error);
+    res.status(500).json({ message: 'Error interno del servidor al crear la reserva.' });
   }
 });
 

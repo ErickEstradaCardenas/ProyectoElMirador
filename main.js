@@ -122,6 +122,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --- Reservation Form Logic ---
+  const reservationForm = document.getElementById('reservation-form');
+  if (reservationForm) {
+    // Primero, verificar si el usuario está logueado
+    const token = localStorage.getItem('token');
+    if (!token) {
+      // Si no hay token, redirigir al login después de un mensaje
+      showMessage(reservationForm, 'Debes iniciar sesión para poder reservar.', true);
+      setTimeout(() => window.location.href = 'login.html', 2000);
+    }
+
+    reservationForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(reservationForm);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch(`${API_URL}/reservations`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Enviar el token para autenticación
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        showMessage(reservationForm, result.message, !response.ok);
+
+      } catch (error) {
+        showMessage(reservationForm, 'Error al conectar con el servidor.', true);
+      }
+    });
+  }
+
   // --- Profile Page Logic ---
   if (window.location.pathname.endsWith('perfil.html')) {
     const token = localStorage.getItem('token');

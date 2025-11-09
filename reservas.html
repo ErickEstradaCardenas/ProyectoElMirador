@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Servicios - Club Campestre</title>
+  <title>Reservas - Club Campestre</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -36,44 +36,24 @@
   </header>
 
   <main>
-    <section id="servicios" style="padding:28px 6%">
-      <div class="two-cols">
-        <div>
-          <h2>Servicios y actividades</h2>
-          <p style="color:var(--muted)">Ofrecemos actividades diarias para todas las edades: clases de natación, yoga al amanecer, torneos deportivos y talleres de cocina.</p>
-          <div style="margin-top:12px" class="card">
-            <h3>Instalaciones destacadas</h3>
-            <ul>
-              <li>Piscina olímpica y piscina recreativa para niños</li>
-              <li>Gimnasio equipado con entrenador personal</li>
-              <li>Salones multiuso para eventos y reuniones</li>
-              <li>Senderos para caminata y ciclovía</li>
-            </ul>
-          </div>
-
-          <div style="margin-top:12px" class="card">
-            <h3>Planes y membresías</h3>
-            <p class="lead" style="margin:0">Membresía familiar, individual y corporativa. Accede a descuentos en restaurantes y prioridad para reservar salones y canchas.</p>
-            <div style="display:flex;gap:8px;margin-top:8px">
-              <div class="card" style="flex:1">
-                <strong>Familiar</strong>
-                <p style="margin:6px 0;color:var(--muted)">Ideal para 4 miembros.</p>
-              </div>
-              <div class="card" style="flex:1">
-                <strong>Individual</strong>
-                <p style="margin:6px 0;color:var(--muted)">Acceso completo para 1 persona.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <aside>
-          <div class="card" style="margin-top:12px;text-align:center">
-            <h4>Reserva rápida</h4>
-            <p style="color:var(--muted)">Reserva canchas o salones en línea.</p>
-            <a href="reservas.html" class="btn">Reservar ahora</a>
-          </div>
-        </aside>
+    <section class="auth-container">
+      <div class="card auth-card">
+        <h2>Realizar una Reserva</h2>
+        <p style="text-align: center; color: var(--muted); margin-bottom: 16px;">Debes haber iniciado sesión para poder reservar.</p>
+        <form id="reservation-form">
+          <label for="service">Servicio a Reservar</label>
+          <select id="service" name="service" required>
+            <option value="" disabled selected>Selecciona un servicio...</option>
+            <option value="cancha_tenis">Cancha de Tenis</option>
+            <option value="cancha_padel">Cancha de Pádel</option>
+            <option value="campo_golf">Campo de Golf (9 hoyos)</option>
+            <option value="salon_eventos">Salón de Eventos</option>
+          </select>
+          <label for="reservationDate">Fecha de la Reserva</label>
+          <input type="date" id="reservationDate" name="reservationDate" required>
+          <div class="form-message" style="display:none; margin-top: 8px; text-align: center;"></div>
+          <button class="btn" type="submit">Confirmar Reserva</button>
+        </form>
       </div>
     </section>
   </main>
