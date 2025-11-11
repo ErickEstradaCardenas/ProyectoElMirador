@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Administración de Pedidos - Club Campestre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .admin-table th, .admin-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .admin-table th {
+      background-color: #f2f2f2;
+    }
+    .admin-table .btn {
+      padding: 4px 8px;
+      font-size: 0.8em;
+      margin-right: 4px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo">CC</div>
+        <div>
+          <div style="font-weight:800">Club Campestre</div>
+          <div style="font-size:13px;color:var(--muted)">Naturaleza · Deporte · Familia</div>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="admin.html">Admin Reservas</a></li>
+          <li><a href="admin-orders.html">Admin Pedidos</a></li>
+          <li><a href="login.html">Iniciar Sesión</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main style="padding:28px 6%">
+    <h2>Administración de Pedidos de Comida</h2>
+
+    <div class="filter-container" style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
+      <input type="date" id="filter-date" placeholder="Filtrar por fecha">
+      <input type="text" id="filter-user" placeholder="Filtrar por Nombre de Usuario">
+      <select id="filter-status">
+        <option value="">Todos los estados</option>
+        <option value="recibido">Recibido</option>
+        <option value="en_preparacion">En Preparación</option>
+        <option value="listo">Listo</option>
+        <option value="entregado">Entregado</option>
+        <option value="cancelado">Cancelado</option>
+      </select>
+      <button id="clear-filter-button" class="btn">Limpiar Filtros</button>
+    </div>
+
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Fecha</th>
+          <th>Detalles del Pedido</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="orders-table-body">
+        <!-- Los pedidos se insertarán aquí -->
+      </tbody>
+    </table>
+
+    <div id="pagination-container" style="display: flex; justify-content: center; align-items: center; margin-top: 20px; gap: 10px;">
+      <!-- Paginación -->
+    </div>
+  </main>
+
+  <footer>
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div><strong>Club Campestre</strong><div style="color:var(--muted);font-size:14px">© 2025 Club Campestre · Todos los derechos reservados</div></div>
+      <div style="display:flex;gap:12px;align-items:center"><a href="#" style="color:inherit;text-decoration:none">Términos</a><a href="#" style="color:inherit;text-decoration:none">Privacidad</a></div>
+    </div>
+  </footer>
+
+  <script src="admin-orders.js" defer></script>
+</body>
+</html>

@@ -24,5 +24,7 @@
       "phone": "9999999999",
       "password": "$2a$10$q5LBnh/bRP3Nm30k8cMD0.Z7tRhr27azkmxXuwTgiKqnCPjo/meBq"
     }
-  ]
+  ],
+  "reservations": [],
+  "foodOrders": []
 }

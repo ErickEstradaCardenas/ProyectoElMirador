@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <!-- Flatpickr CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
   <header>
@@ -37,20 +39,56 @@
 
   <main>
     <section class="auth-container">
-      <div class="card auth-card">
+      <div class="card auth-card" style="max-width: 650px;">
         <h2>Realizar una Reserva</h2>
         <p style="text-align: center; color: var(--muted); margin-bottom: 16px;">Debes haber iniciado sesión para poder reservar.</p>
         <form id="reservation-form">
-          <label for="service">Servicio a Reservar</label>
-          <select id="service" name="service" required>
-            <option value="" disabled selected>Selecciona un servicio...</option>
-            <option value="cancha_tenis">Cancha de Tenis</option>
-            <option value="cancha_padel">Cancha de Pádel</option>
-            <option value="campo_golf">Campo de Golf (9 hoyos)</option>
-            <option value="salon_eventos">Salón de Eventos</option>
-          </select>
-          <label for="reservationDate">Fecha de la Reserva</label>
-          <input type="date" id="reservationDate" name="reservationDate" required>
+          <div style="border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 20px;">
+            <h3>Fechas de Estancia</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div>
+                <label for="reservationDate">Fecha de Inicio</label>
+                <input type="text" id="reservationDate" name="reservationDate" placeholder="Selecciona una fecha..." required>
+              </div>
+              <div>
+                <label for="numberOfDays">Cantidad de Días</label>
+                <input type="number" id="numberOfDays" name="numberOfDays" min="1" max="7" value="1" required>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3>Detalles de Habitaciones</h3>
+            <div id="room-selections-container">
+              <!-- Las selecciones de habitaciones se añadirán aquí dinámicamente -->
+            </div>
+            <button type="button" id="add-room-button" class="btn" style="background-color: #0f9d58; margin-top: 10px; width: auto; display: inline-block;">Añadir otro tipo de Habitación</button>
+          </div>
+
+          <!-- Plantilla para una selección de habitación (oculta) -->
+          <template id="room-selection-template">
+            <div class="room-selection-item" style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 10px; align-items: end; margin-bottom: 10px;">
+              <div>
+                <select class="room-type-select" required>
+                  <option value="" disabled selected>Selecciona el número de personas...</option>
+                  <option value="habitacion_1_persona">Habitación para 1 persona (S/ 60.00)</option>
+                  <option value="habitacion_2_personas">Habitación para 2 personas (S/ 100.00)</option>
+                  <option value="habitacion_3_personas">Habitación para 3 personas (S/ 140.00)</option>
+                  <option value="habitacion_4_personas">Habitación para 4 personas (S/ 170.00)</option>
+                  <option value="habitacion_5_personas">Habitación para 5 personas (S/ 200.00)</option>
+                </select>
+              </div>
+              <div>
+                <input type="number" class="room-quantity-input" min="1" max="5" value="1" required>
+              </div>
+              <button type="button" class="btn remove-room-button" style="background-color: #dc3545;">Eliminar</button>
+            </div>
+          </template>
+
+          <div id="total-price-container" style="text-align: right; font-size: 1.2em; font-weight: bold; margin-top: 20px; padding-top: 10px; border-top: 1px solid #eee;">
+            Total Estimado: <span id="total-price">S/ 0.00</span>
+          </div>
+
           <div class="form-message" style="display:none; margin-top: 8px; text-align: center;"></div>
           <button class="btn" type="submit">Confirmar Reserva</button>
         </form>
@@ -72,6 +110,8 @@
   </footer>
 
   <script src="main.js" defer></script>
+  <!-- Flatpickr JS -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 </body>
 </html>

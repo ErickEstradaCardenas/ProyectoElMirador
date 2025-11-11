@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Realizar Pedido - Club Campestre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo">CC</div>
+        <div>
+          <div style="font-weight:800">Club Campestre</div>
+          <div style="font-size:13px;color:var(--muted)">Naturaleza · Deporte · Familia</div>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="eventos.html">Eventos</a></li>
+          <li><a href="galeria.html">Galería</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="login.html">Iniciar Sesión</a></li>
+        </ul>
+      </nav>
+      <button class="hamburger" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="auth-container">
+      <div class="card auth-card" style="max-width: 650px;">
+        <h2>Pedir del Restaurante</h2>
+        <p style="text-align: center; color: var(--muted); margin-bottom: 16px;">Selecciona los platos y cantidades que deseas ordenar.</p>
+        <form id="food-order-form">
+          <div id="menu-items-container" style="text-align: left;">
+            <p>Cargando menú...</p>
+          </div>
+          <div id="total-order-container" style="text-align: right; font-size: 1.2em; font-weight: bold; margin-top: 20px; padding-top: 10px; border-top: 1px solid #eee;">
+            Total a Pagar: <span id="total-order-price">S/ 0.00</span>
+          </div>
+          <div class="form-message" style="display:none; margin-top: 8px; text-align: center;"></div>
+          <button type="submit" class="btn" style="margin-top: 16px; width: 100%;">Realizar Pedido</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div>
+        <strong>Club Campestre</strong>
+        <div style="color:var(--muted);font-size:14px">© 2025 Club Campestre · Todos los derechos reservados</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <a href="#" style="color:inherit;text-decoration:none">Términos</a>
+        <a href="#" style="color:inherit;text-decoration:none">Privacidad</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js" defer></script>
+</body>
+</html>
