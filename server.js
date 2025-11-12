@@ -89,7 +89,7 @@ app.post('/register', async (req, res) => {
 // Endpoint para iniciar sesión
 app.post('/login', async (req, res) => {
   try {
-    const { phone, password } = req.body;
+    const { phone, password, role } = req.body; // Recibimos el rol del formulario
     const db = await readDB();
 
     // Buscar al usuario
@@ -102,6 +102,11 @@ app.post('/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Credenciales incorrectas.' });
+    }
+
+    // Security Check: Validar que el rol seleccionado coincida con el rol en la BD
+    if (role === 'admin' && user.role !== 'admin') {
+      return res.status(403).json({ message: 'No tienes permisos de administrador.' });
     }
 
     // Crear y firmar el token
@@ -466,6 +471,40 @@ app.get('/my-food-orders', authMiddleware, async (req, res) => {
     res.json(userOrders);
   } catch (error) {
     console.error('Error fetching food order history:', error);
+    res.status(500).json({ message: 'Error interno del servidor.' });
+  }
+});
+
+app.patch('/my-food-orders/:id/cancel', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    const db = await readDB();
+    const orderIndex = (db.foodOrders || []).findIndex(o => o.id === id);
+
+    if (orderIndex === -1) {
+      return res.status(404).json({ message: 'Pedido no encontrado.' });
+    }
+
+    const order = db.foodOrders[orderIndex];
+
+    // Security check: ensure the user owns this order
+    if (order.userId !== userId) {
+      return res.status(403).json({ message: 'No tienes permiso para cancelar este pedido.' });
+    }
+
+    // Business logic check: only "recibido" orders can be cancelled by the user
+    if (order.status !== 'recibido') {
+      return res.status(400).json({ message: `No se puede cancelar un pedido con estado '${order.status}'.` });
+    }
+
+    db.foodOrders[orderIndex].status = 'cancelado';
+    await writeDB(db);
+
+    res.json({ message: 'Pedido cancelado con éxito.' });
+  } catch (error) {
+    console.error('Error cancelling food order:', error);
     res.status(500).json({ message: 'Error interno del servidor.' });
   }
 });

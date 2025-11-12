@@ -1,7 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
   const API_URL = 'http://localhost:3000';
-  const token = localStorage.getItem('token'); // Asumiendo que el admin también se loguea
+  const token = localStorage.getItem('token');
   const reservationsTableBody = document.getElementById('reservations-table-body');
+  const foodOrdersTableBody = document.getElementById('food-orders-table-body');
+
+  // --- Protección de la página ---
+  // Función para decodificar el token JWT (simplificada)
+  const parseJwt = (token) => {
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      return null;
+    }
+  };
+
+  if (!token || parseJwt(token)?.role !== 'admin') {
+    // Si no hay token o el rol no es 'admin', redirigir al inicio
+    alert('Acceso denegado. Debes ser administrador.');
+    window.location.href = 'index.html';
+    return; // Detener la ejecución del resto del script
+  }
+
+  // --- Mostrar mensaje de bienvenida ---
+  const adminWelcomeMessage = document.getElementById('admin-welcome-message');
+  if (adminWelcomeMessage) {
+    const userPayload = parseJwt(token);
+    adminWelcomeMessage.textContent = `Bienvenido, ${userPayload.name}.`;
+  }
 
   // Elementos de filtro
   const filterDateInput = document.getElementById('filter-date');
@@ -18,8 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Función para obtener todas las reservas
   const fetchReservations = async () => {
     try {
-      // Para este ejemplo, asumimos que el admin tiene un token válido.
-      // En una app real, el endpoint /admin/reservations debería validar el rol de admin.
       const response = await fetch(`${API_URL}/admin/reservations`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -36,11 +59,67 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Función para obtener todos los pedidos de comida
+  const fetchFoodOrders = async () => {
+    try {
+      const response = await fetch(`${API_URL}/admin/food-orders`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const orders = await response.json();
+      populateFoodOrdersTable(orders);
+    } catch (error) {
+      console.error('Error fetching food orders:', error);
+      foodOrdersTableBody.innerHTML = `<tr><td colspan="6">Error al cargar los pedidos.</td></tr>`;
+    }
+  };
+
+  // Función para llenar la tabla de pedidos de comida
+  const populateFoodOrdersTable = (orders) => {
+    foodOrdersTableBody.innerHTML = '';
+    if (orders.length === 0) {
+      foodOrdersTableBody.innerHTML = '<tr><td colspan="6">No hay pedidos registrados.</td></tr>';
+      return;
+    }
+    orders.forEach(order => {
+      const itemDetailsHtml = `<ul style="margin: 0; padding-left: 20px;">${order.items.map(item => `<li>${item.quantity} x ${item.name}</li>`).join('')}</ul>`;
+      const orderDate = new Date(order.orderDate).toLocaleDateString('es-ES');
+      const row = `
+        <tr>
+          <td>${order.userName || 'N/A'}</td>
+          <td>${orderDate}</td>
+          <td>${itemDetailsHtml}</td>
+          <td>S/ ${order.total.toFixed(2)}</td>
+          <td><span class="status-${order.status}">${order.status.replace('_', ' ')}</span></td>
+          <td>
+            <select class="status-select" data-order-id="${order.id}">
+              <option value="recibido" ${order.status === 'recibido' ? 'selected' : ''}>Recibido</option>
+              <option value="en_preparacion" ${order.status === 'en_preparacion' ? 'selected' : ''}>En Preparación</option>
+              <option value="listo" ${order.status === 'listo' ? 'selected' : ''}>Listo</option>
+              <option value="entregado" ${order.status === 'entregado' ? 'selected' : ''}>Entregado</option>
+              <option value="cancelado" ${order.status === 'cancelado' ? 'selected' : ''}>Cancelado</option>
+            </select>
+          </td>
+        </tr>
+      `;
+      foodOrdersTableBody.innerHTML += row;
+    });
+
+    // Añadir event listeners a los nuevos selectores de estado
+    document.querySelectorAll('.status-select').forEach(select => {
+      select.addEventListener('change', (e) => {
+        const orderId = e.target.dataset.orderId;
+        const newStatus = e.target.value;
+        updateFoodOrderStatus(orderId, newStatus);
+      });
+    });
+  };
+
   // Función para llenar la tabla con los datos de las reservas
   const populateTable = (reservationsToShow) => {
     reservationsTableBody.innerHTML = ''; // Limpiar la tabla
     if (reservationsToShow.length === 0) {
-      reservationsTableBody.innerHTML = '<tr><td colspan="6">No se encontraron reservas con los filtros aplicados.</td></tr>';
+      reservationsTableBody.innerHTML = '<tr><td colspan="7">No se encontraron reservas con los filtros aplicados.</td></tr>';
       return;
     }
 
@@ -56,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <td>${roomDetailsHtml}</td>
           <td>${reservation.reservationDate}</td>
           <td>${reservation.numberOfDays}</td>
-          <td>${reservation.status}</td>
+          <td><span class="status-${reservation.status}">${reservation.status}</span></td>
           <td>
             <button class="btn" onclick="updateReservationStatus('${reservation.id}', 'confirmado')">Confirmar</button>
             <button class="btn" onclick="updateReservationStatus('${reservation.id}', 'cancelado')">Cancelar</button>
@@ -161,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
     displayData();
   }
 
-  // Función para actualizar el estado de una reserva (simulada por ahora)
+  // Función para actualizar el estado de una reserva
   window.updateReservationStatus = async (reservationId, newStatus) => {
     try {
       const response = await fetch(`${API_URL}/admin/reservations/${reservationId}`, {
@@ -185,6 +264,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Cargar las reservas al cargar la página
+  // Función para actualizar el estado de un pedido de comida
+  const updateFoodOrderStatus = async (orderId, newStatus) => {
+    try {
+      const response = await fetch(`${API_URL}/admin/food-orders/${orderId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.message || 'Error al actualizar el estado del pedido.');
+      }
+
+      // No es necesario recargar todo, solo mostrar una confirmación
+      alert('Estado del pedido actualizado.');
+    } catch (error) {
+      alert(`Error: ${error.message}`);
+    }
+  };
+
+  // Cargar todos los datos al iniciar la página
   fetchReservations();
+  fetchFoodOrders();
 });

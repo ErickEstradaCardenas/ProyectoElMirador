@@ -26,6 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginLink = document.querySelector('a[href="login.html"]');
   const navList = document.querySelector('nav ul');
 
+  // Función para decodificar el token JWT (simplificada, solo para leer el payload)
+  const parseJwt = (token) => {
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      return null;
+    }
+  };
+
   if (token && loginLink && navList) {
     // Usuario autenticado: cambiar "Iniciar Sesión" por "Mi Perfil" y añadir "Cerrar Sesión"
     loginLink.textContent = 'Mi Perfil';
@@ -37,6 +46,17 @@ document.addEventListener('DOMContentLoaded', () => {
     orderLink.textContent = 'Pedir Comida';
     orderListItem.appendChild(orderLink);
     loginLink.parentElement.insertAdjacentElement('beforebegin', orderListItem);
+
+    // --- Lógica para el Panel de Administración ---
+    const userPayload = parseJwt(token);
+    if (userPayload && userPayload.role === 'admin') {
+      const adminListItem = document.createElement('li');
+      const adminLink = document.createElement('a');
+      adminLink.href = 'admin.html';
+      adminLink.textContent = 'Panel de Admin';
+      adminListItem.appendChild(adminLink);
+      loginLink.parentElement.insertAdjacentElement('beforebegin', adminListItem);
+    }
 
     const logoutListItem = document.createElement('li');
     const logoutLink = document.createElement('a');
@@ -118,8 +138,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (response.ok) {
           // Guardar el token en localStorage
           localStorage.setItem('token', result.token);
+          const userPayload = parseJwt(result.token);
           showMessage(loginForm, result.message);
-          setTimeout(() => window.location.href = 'perfil.html', 1000);
+          // Redirigir al panel de admin si el rol es 'admin', si no, al perfil
+          const destination = userPayload?.role === 'admin' ? 'admin.html' : 'perfil.html';
+          setTimeout(() => {
+            window.location.href = destination;
+          }, 1000);
         } else {
           showMessage(loginForm, result.message, true);
         }
@@ -457,38 +482,88 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       };
 
-      // Cargar el historial de pedidos de comida
-      fetch(`${API_URL}/my-food-orders`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
-      .then(res => res.json())
-      .then(orders => {
-        const historyBody = document.getElementById('food-orders-history-body');
-        if (orders.length === 0) {
-          historyBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">No has realizado pedidos de comida aún.</td></tr>';
-          return;
-        }
+      const fetchFoodOrdersHistory = () => {
+        fetch(`${API_URL}/my-food-orders`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(res => res.json())
+        .then(orders => {
+          const historyBody = document.getElementById('food-orders-history-body');
+          historyBody.innerHTML = ''; // Limpiar antes de repoblar
+          if (orders.length === 0) {
+            historyBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No has realizado pedidos de comida aún.</td></tr>';
+            return;
+          }
 
-        orders.forEach(order => {
-          const itemDetailsHtml = `<ul style="margin: 0; padding-left: 20px;">${order.items.map(item => `<li>${item.quantity} x ${item.name}</li>`).join('')}</ul>`;
-          const orderDate = new Date(order.orderDate).toLocaleDateString('es-ES');
+          orders.forEach(order => {
+            const itemDetailsHtml = `<ul style="margin: 0; padding-left: 20px;">${order.items.map(item => `<li>${item.quantity} x ${item.name}</li>`).join('')}</ul>`;
+            const orderDate = new Date(order.orderDate).toLocaleDateString('es-ES');
+            const cancelButtonHtml = order.status === 'recibido' ? `<button class="btn" style="background-color: #c0392b; font-size: 0.9em; padding: 4px 8px;" onclick="cancelMyFoodOrder('${order.id}')">Cancelar</button>` : '';
 
-          const row = `
-            <tr>
-              <td>${orderDate}</td>
-              <td>${itemDetailsHtml}</td>
-              <td>S/ ${order.total.toFixed(2)}</td>
-              <td><span class="status-${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span></td>
-            </tr>
-          `;
-          historyBody.innerHTML += row;
+            const row = `
+              <tr>
+                <td>${orderDate}</td>
+                <td>${itemDetailsHtml}</td>
+                <td>S/ ${order.total.toFixed(2)}</td>
+                <td><span class="status-${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span></td>
+                <td>${cancelButtonHtml}</td>
+              </tr>
+            `;
+            historyBody.innerHTML += row;
+          });
+        })
+        .catch(error => {
+          console.error('Error al cargar el historial de pedidos:', error);
+          const historyBody = document.getElementById('food-orders-history-body');
+          historyBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Error al cargar el historial de pedidos.</td></tr>';
         });
-      })
-      .catch(error => {
-        console.error('Error al cargar el historial de pedidos:', error);
-        const historyBody = document.getElementById('food-orders-history-body');
-        historyBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: red;">Error al cargar el historial de pedidos.</td></tr>';
-      });
+      };
+
+      window.cancelMyFoodOrder = async (orderId) => {
+        if (!confirm('¿Estás seguro de que deseas cancelar este pedido?')) return;
+
+        try {
+          const response = await fetch(`${API_URL}/my-food-orders/${orderId}/cancel`, {
+            method: 'PATCH',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+
+          if (!response.ok) {
+            const result = await response.json();
+            throw new Error(result.message || 'No se pudo cancelar el pedido.');
+          }
+
+          alert('Pedido cancelado con éxito.');
+          fetchFoodOrdersHistory(); // Recargar el historial para mostrar el estado actualizado
+        } catch (error) {
+          alert(`Error: ${error.message}`);
+        }
+      };
+
+      window.cancelMyFoodOrder = async (orderId) => {
+        if (!confirm('¿Estás seguro de que deseas cancelar este pedido?')) return;
+
+        try {
+          const response = await fetch(`${API_URL}/my-food-orders/${orderId}/cancel`, {
+            method: 'PATCH',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+
+          if (!response.ok) {
+            const result = await response.json();
+            throw new Error(result.message || 'No se pudo cancelar el pedido.');
+          }
+
+          alert('Pedido cancelado con éxito.');
+          fetchFoodOrdersHistory(); // Recargar el historial para mostrar el estado actualizado
+        } catch (error) {
+          alert(`Error: ${error.message}`);
+        }
+      };
+
+      // Cargar historiales al cargar la página de perfil
+      fetchReservationsHistory();
+      fetchFoodOrdersHistory();
     }
 
     // El botón de logout ahora está en el menú de navegación, pero si

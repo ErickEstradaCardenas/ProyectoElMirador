@@ -1,28 +1,25 @@
 {
   "users": [
     {
-      "id": 1761329876088,
-      "name": "ana banan",
-      "phone": "987654321",
-      "password": "$2a$10$Qn6NJfoXLRqUOr8v6IbEeeQDZUJpaPtRdIyfL6P2E73AqWxjZM91u"
+      "id": "3c45752c-b74f-4eda-89f9-bc438b0f19d0",
+      "name": "Pepe Gomez2",
+      "phone": "9999999999",
+      "password": "$2a$10$q5LBnh/bRP3Nm30k8cMD0.Z7tRhr27azkmxXuwTgiKqnCPjo/meBq",
+      "role": "admin"
     },
     {
       "id": "61e528e0-6a4f-4e83-927c-b6dab361429c",
       "name": "pelusa",
       "phone": "999666333",
-      "password": "$2a$10$vC3Vc5PBpeKnXWSOGAUM9enJ24t1ontweHPoQCsBhSk4aHi1nfwN2"
+      "password": "$2a$10$vC3Vc5PBpeKnXWSOGAUM9enJ24t1ontweHPoQCsBhSk4aHi1nfwN2",
+      "role": "socio"
     },
     {
       "id": "d029b76e-419a-4808-8fc0-ff221f030e66",
       "name": "Pepe",
       "phone": "999111222",
-      "password": "$2a$10$oiiy.plE787zF11ok6o5culPc51JoHCxibGZaCO5qyEh5Jh31cVjq"
-    },
-    {
-      "id": "3c45752c-b74f-4eda-89f9-bc438b0f19d0",
-      "name": "Pepe Gomez2",
-      "phone": "9999999999",
-      "password": "$2a$10$q5LBnh/bRP3Nm30k8cMD0.Z7tRhr27azkmxXuwTgiKqnCPjo/meBq"
+      "password": "$2a$10$oiiy.plE787zF11ok6o5culPc51JoHCxibGZaCO5qyEh5Jh31cVjq",
+      "role": "socio"
     }
   ],
   "reservations": [],
