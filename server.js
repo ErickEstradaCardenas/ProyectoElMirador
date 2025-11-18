@@ -271,6 +271,21 @@ app.patch('/my-reservations/:id/cancel', authMiddleware, async (req, res) => {
       return res.status(400).json({ message: `No se puede cancelar una reserva con estado '${reservation.status}'.` });
     }
 
+    // --- Lógica de Plazo de Cancelación ---
+    const now = new Date();
+    // La fecha de reserva es un string 'YYYY-MM-DD'. Al crear una fecha, se interpreta como UTC.
+    // Creamos la fecha de inicio de la reserva a las 00:00:00 del día correspondiente.
+    const reservationStartDate = new Date(reservation.reservationDate);
+
+    // El plazo límite es el día anterior a las 12:00 PM.
+    const cancellationDeadline = new Date(reservationStartDate);
+    cancellationDeadline.setDate(reservationStartDate.getDate() - 1); // Un día antes
+    cancellationDeadline.setHours(12, 0, 0, 0); // A las 12:00:00
+
+    if (now > cancellationDeadline) {
+      return res.status(400).json({ message: 'El plazo para cancelar la reserva ha expirado. Solo se puede cancelar hasta el mediodía del día anterior al inicio de la reserva.' });
+    }
+
     db.reservations[reservationIndex].status = 'cancelado';
     await writeDB(db);
 

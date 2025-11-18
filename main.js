@@ -163,7 +163,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // Si no hay token, redirigir al login después de un mensaje
       showMessage(reservationForm, 'Debes iniciar sesión para poder reservar.', true);
       setTimeout(() => window.location.href = 'login.html', 2000);
+    return; // Detener la ejecución si no está logueado
     }
+
+  // --- Lógica de Stripe ---
+  let stripe, elements;
 
     // Lógica para añadir/eliminar selecciones de habitaciones
     const roomSelectionsContainer = document.getElementById('room-selections-container');
@@ -258,9 +262,15 @@ document.addEventListener('DOMContentLoaded', () => {
     reservationForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const formData = new FormData(reservationForm);
+      const submitButton = reservationForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Procesando pago...';
+
       const reservationData = {
         reservationDate: formData.get('reservationDate'),
         numberOfDays: parseInt(formData.get('numberOfDays'), 10),
+        reservationDate: document.getElementById('reservationDate').value,
+        numberOfDays: parseInt(document.getElementById('numberOfDays').value, 10),
         roomSelections: getRoomSelections() // Obtener las selecciones dinámicas
       };
 
@@ -271,16 +281,24 @@ document.addEventListener('DOMContentLoaded', () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Enviar el token para autenticación
-          }, // Enviar el token para autenticación
+            'Authorization': `Bearer ${token}`
+          },
           body: JSON.stringify(reservationData),
         });
 
         const result = await response.json();
-        showMessage(reservationForm, result.message, !response.ok);
+        if (!response.ok) {
+          throw new Error(result.message || 'No se pudo crear la reserva.');
+        }
+
+        showMessage(reservationForm, result.message, false);
+        submitButton.textContent = 'Reserva Realizada';
+        setTimeout(() => window.location.href = 'perfil.html', 2000);
 
       } catch (error) {
-        showMessage(reservationForm, 'Error al conectar con el servidor.', true);
+        showMessage(reservationForm, error.message, true);
+        submitButton.disabled = false;
+        submitButton.textContent = 'Realizar Reserva y Pagar';
       }
     });
   }
@@ -395,6 +413,10 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(user => {
         document.getElementById('profile-name').textContent = user.name;
         document.getElementById('profile-phone').textContent = user.phone;
+
+        // Ahora que el perfil está cargado, cargamos los historiales.
+        fetchReservationsHistory();
+        fetchFoodOrdersHistory();
       })
       .catch((error) => {
         console.error('Error al obtener perfil:', error.message);
@@ -420,27 +442,24 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(handleHistoryError);
       };
 
-      // Cargar el historial de reservas
-      fetch(`${API_URL}/my-reservations`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
-      .then(res => res.json())
-      .then(reservations => {
-        const historyBody = document.getElementById('reservations-history-body');
-        if (reservations.length === 0) {
-          historyBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No tienes reservas aún.</td></tr>';
-          return;
-        }
-        populateReservationsHistory(reservations);
-      })
-      .catch(handleHistoryError);
-
       const populateReservationsHistory = (reservations) => {
         const historyBody = document.getElementById('reservations-history-body');
         historyBody.innerHTML = ''; // Limpiar la tabla
         reservations.forEach(res => {
           const roomDetailsHtml = res.roomSelections ? `<ul style="margin: 0; padding-left: 20px;">${res.roomSelections.map(sel => `<li>${sel.quantity} x ${sel.type.replace('habitacion_', '').replace(/_/g, ' ')}</li>`).join('')}</ul>` : 'No especificado';
-          const cancelButtonHtml = res.status === 'pendiente' ? `<button class="btn" style="background-color: #c0392b; font-size: 0.9em; padding: 4px 8px;" onclick="cancelMyReservation('${res.id}')">Cancelar</button>` : '';
+          
+          // --- Lógica para mostrar el botón de cancelar ---
+          let cancelButtonHtml = '';
+          if (res.status === 'pendiente') {
+            const now = new Date();
+            const reservationStartDate = new Date(res.reservationDate);
+            const cancellationDeadline = new Date(reservationStartDate);
+            cancellationDeadline.setDate(reservationStartDate.getDate() - 1);
+            cancellationDeadline.setHours(12, 0, 0, 0);
+            if (now <= cancellationDeadline) {
+              cancelButtonHtml = `<button class="btn" style="background-color: #c0392b; font-size: 0.9em; padding: 4px 8px;" onclick="cancelMyReservation('${res.id}')">Cancelar</button>`;
+            }
+          }
 
           const row = `
             <tr>
@@ -539,31 +558,6 @@ document.addEventListener('DOMContentLoaded', () => {
           alert(`Error: ${error.message}`);
         }
       };
-
-      window.cancelMyFoodOrder = async (orderId) => {
-        if (!confirm('¿Estás seguro de que deseas cancelar este pedido?')) return;
-
-        try {
-          const response = await fetch(`${API_URL}/my-food-orders/${orderId}/cancel`, {
-            method: 'PATCH',
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
-
-          if (!response.ok) {
-            const result = await response.json();
-            throw new Error(result.message || 'No se pudo cancelar el pedido.');
-          }
-
-          alert('Pedido cancelado con éxito.');
-          fetchFoodOrdersHistory(); // Recargar el historial para mostrar el estado actualizado
-        } catch (error) {
-          alert(`Error: ${error.message}`);
-        }
-      };
-
-      // Cargar historiales al cargar la página de perfil
-      fetchReservationsHistory();
-      fetchFoodOrdersHistory();
     }
 
     // El botón de logout ahora está en el menú de navegación, pero si

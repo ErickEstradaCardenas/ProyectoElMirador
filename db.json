@@ -22,6 +22,46 @@
       "role": "socio"
     }
   ],
-  "reservations": [],
-  "foodOrders": []
+  "reservations": [
+    {
+      "id": "89712692-72e1-4ac2-a1a0-862f51f9e823",
+      "userId": "61e528e0-6a4f-4e83-927c-b6dab361429c",
+      "reservationDate": "2025-11-18",
+      "numberOfDays": 2,
+      "roomSelections": [
+        {
+          "type": "habitacion_1_persona",
+          "quantity": 1
+        }
+      ],
+      "status": "confirmado"
+    },
+    {
+      "id": "443dd8e5-bf3c-4790-b673-54feda8b49b8",
+      "userId": "61e528e0-6a4f-4e83-927c-b6dab361429c",
+      "reservationDate": "2025-11-21",
+      "numberOfDays": 1,
+      "roomSelections": [
+        {
+          "type": "habitacion_1_persona",
+          "quantity": 1
+        }
+      ],
+      "status": "pendiente"
+    }
+  ],
+  "foodOrders": [
+    {
+      "id": "b34f8740-8d67-4f64-8768-60a5192f1965",
+      "userId": "61e528e0-6a4f-4e83-927c-b6dab361429c",
+      "orderDate": "2025-11-18T16:18:33.355Z",
+      "status": "recibido",
+      "items": [
+        {
+          "itemId": "ceviche",
+          "quantity": 1
+        }
+      ]
+    }
+  ]
 }
