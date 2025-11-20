@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="es">
 <head>
+  <!-- Metadatos y enlaces a fuentes -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Club Campestre - Bienvenidos</title>
@@ -11,6 +12,7 @@
 </head>
 <body>
   <header>
+    <!-- Barra de navegación principal -->
     <div class="nav">
       <div class="brand">
         <div class="logo">CC</div>
@@ -36,13 +38,14 @@
   </header>
 
   <main>
+    <!-- Sección Hero: La primera impresión de la página -->
     <section id="inicio" class="hero">
       <div class="hero-inner">
         <span class="kicker">Bienvenido</span>
         <h1>Vive la experiencia del Club Campestre — naturaleza, deporte y tranquilidad.</h1>
         <p class="lead">Piscinas, canchas de tenis, restaurante con vista al lago, programación familiar y espacios privados para eventos. Un lugar pensado para reconectar.</p>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <a class="cta" href="contacto.html">Hazte socio</a>
+          <a class="cta" href="contacto.html" role="button">Hazte socio</a>
           <a href="servicios.html" style="text-decoration:none;align-self:center;color:var(--dark);font-weight:700">Ver servicios →</a>
         </div>
         <div class="amenities" style="margin-top:12px">
@@ -50,14 +53,107 @@
           <div class="card">🎾 Canchas de tenis y pádel</div>
           <div class="card">🏌️ Campo de golf 9 hoyos</div>
           <div class="card">🍽️ Restaurante y bar</div>
+          <div class="card">🌳 Amplias áreas verdes</div>
+          <div class="card">🎉 Salones para eventos</div>
         </div>
       </div>
       <div class="media card" style="background-image:url('https://images.unsplash.com/photo-1504805572947-34fad45aed93?auto=format&fit=crop&w=1200&q=60')"></div>
     </section>
 
+    <!-- Nueva Sección: Sobre Nosotros -->
+    <section id="about" class="section-padded section-light-bg">
+      <div class="container">
+        <div class="grid-2-cols">
+          <div class="about-content">
+            <span class="kicker">Nuestra Historia</span>
+            <h2>Un Legado de Naturaleza y Bienestar</h2>
+            <p class="lead">Desde 1985, el Club Campestre ha sido el refugio perfecto para familias que buscan un escape de la rutina. Fundado con la visión de crear un espacio donde la naturaleza y el deporte se fusionen, hemos crecido para ofrecer una experiencia inigualable de relajación y diversión.</p>
+            <p>Nos enorgullece ser un punto de encuentro para la comunidad, fomentando valores como la amistad, el respeto por el medio ambiente y un estilo de vida activo. Cada rincón de nuestro club está diseñado para que tú y tu familia creen recuerdos inolvidables.</p>
+            <a class="cta cta-secondary" href="contacto.html" role="button">Conoce más</a>
+          </div>
+          <div class="about-image">
+            <img src="https://images.unsplash.com/photo-1519046706917-485977636e25?auto=format&fit=crop&w=800&q=80" alt="Familia disfrutando en el Club Campestre" class="img-responsive card">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nueva Sección: Nuestras Instalaciones -->
+    <section id="facilities" class="section-padded">
+      <div class="container text-center">
+        <span class="kicker">Explora</span>
+        <h2>Instalaciones de Primer Nivel</h2>
+        <p class="lead">Descubre todo lo que el Club Campestre tiene para ofrecerte. Espacios diseñados para tu disfrute y el de toda tu familia.</p>
+        <div class="grid-3-cols facilities-grid">
+          <div class="facility-item card">
+            <img src="https://images.unsplash.com/photo-1561489396-88872431684e?auto=format&fit=crop&w=400&h=250&q=80" alt="Canchas de Tenis">
+            <h3>Canchas de Tenis y Pádel</h3>
+            <p>Mejora tu juego en nuestras modernas canchas, disponibles para todas las edades y niveles.</p>
+          </div>
+          <div class="facility-item card">
+            <img src="https://images.unsplash.com/photo-1590402494682-cd37179469a4?auto=format&fit=crop&w=400&h=250&q=80" alt="Piscina Olímpica">
+            <h3>Piscinas Climatizadas</h3>
+            <p>Disfruta de nuestras piscinas para natación y recreación, perfectas para cualquier clima.</p>
+          </div>
+          <div class="facility-item card">
+            <img src="https://images.unsplash.com/photo-1546484396-fb3ba6f74125?auto=format&fit=crop&w=400&h=250&q=80" alt="Campo de Golf">
+            <h3>Campo de Golf 9 Hoyos</h3>
+            <p>Un desafiante campo para los amantes del golf, rodeado de paisajes espectaculares.</p>
+          </div>
+          <div class="facility-item card">
+            <img src="https://images.unsplash.com/photo-1551632811-5617803d3167?auto=format&fit=crop&w=400&h=250&q=80" alt="Restaurante con vista al lago">
+            <h3>Restaurante con Vista al Lago</h3>
+            <p>Deléitate con nuestra gastronomía local e internacional mientras disfrutas de vistas panorámicas.</p>
+          </div>
+          <div class="facility-item card">
+            <img src="https://images.unsplash.com/photo-1517486804360-e411d516247c?auto=format&fit=crop&w=400&h=250&q=80" alt="Área de juegos para niños">
+            <h3>Áreas Recreativas Infantiles</h3>
+            <p>Espacios seguros y divertidos para que los más pequeños de la familia jueguen y exploren.</p>
+          </div>
+          <div class="facility-item card">
+            <img src="https://images.unsplash.com/photo-1523240795603-892742fa213a?auto=format&fit=crop&w=400&h=250&q=80" alt="Salones de eventos">
+            <h3>Salones para Eventos</h3>
+            <p>Celebra tus momentos especiales en nuestros elegantes salones, con servicio personalizado.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nueva Sección: Testimonios -->
+    <section id="testimonials" class="section-padded section-light-bg">
+      <div class="container text-center">
+        <span class="kicker">Experiencias</span>
+        <h2>Lo que dicen nuestros socios</h2>
+        <div class="grid-3-cols testimonial-grid">
+          <div class="testimonial-card card">
+            <p class="quote">"El Club Campestre es nuestro segundo hogar. La tranquilidad, las instalaciones y la calidez de su gente son inigualables. ¡Lo recomendamos al 100%!"</p>
+            <div class="author">- Familia García</div>
+          </div>
+          <div class="testimonial-card card">
+            <p class="quote">"Mis hijos aman las piscinas y las actividades. Como socio, valoro mucho la calidad de las canchas de tenis y el excelente servicio del restaurante."</p>
+            <div class="author">- Carlos M.</div>
+          </div>
+          <div class="testimonial-card card">
+            <p class="quote">"He celebrado varios eventos aquí y siempre superan mis expectativas. El entorno natural es perfecto y el equipo es muy profesional."</p>
+            <div class="author">- Ana Sofía P.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nueva Sección: Llamada a la Acción Final -->
+    <section id="cta-join" class="section-padded section-dark-bg text-center">
+      <div class="container">
+        <h2>¿Listo para vivir la experiencia Campestre?</h2>
+        <p class="lead">Únete a nuestra familia y disfruta de un estilo de vida lleno de naturaleza, deporte y momentos inolvidables.</p>
+        <a class="cta cta-large" href="contacto.html" role="button">¡Hazte Socio Hoy!</a>
+      </div>
+    </section>
+
   </main>
 
   <footer>
+    <!-- Pie de página -->
     <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
       <div>
         <strong>Club Campestre</strong>

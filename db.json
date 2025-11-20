@@ -47,7 +47,41 @@
           "quantity": 1
         }
       ],
-      "status": "pendiente"
+      "status": "confirmado"
+    },
+    {
+      "id": "a2d56c37-f4d4-4f1d-a887-9afac853be06",
+      "userId": "61e528e0-6a4f-4e83-927c-b6dab361429c",
+      "reservationDate": "2025-11-23",
+      "numberOfDays": 4,
+      "roomSelections": [
+        {
+          "type": "habitacion_1_persona",
+          "quantity": 1
+        },
+        {
+          "type": "habitacion_3_personas",
+          "quantity": 1
+        },
+        {
+          "type": "habitacion_1_persona",
+          "quantity": 1
+        }
+      ],
+      "status": "confirmado"
+    },
+    {
+      "id": "e6671d91-3e99-4dda-85a6-01d287dd85de",
+      "userId": "61e528e0-6a4f-4e83-927c-b6dab361429c",
+      "reservationDate": "2025-11-20",
+      "numberOfDays": 1,
+      "roomSelections": [
+        {
+          "type": "habitacion_1_persona",
+          "quantity": 1
+        }
+      ],
+      "status": "confirmado"
     }
   ],
   "foodOrders": [
@@ -59,6 +93,18 @@
       "items": [
         {
           "itemId": "ceviche",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "815220c1-00f8-45dc-ab88-6c96c7aa23d8",
+      "userId": "61e528e0-6a4f-4e83-927c-b6dab361429c",
+      "orderDate": "2025-11-20T15:48:49.377Z",
+      "status": "recibido",
+      "items": [
+        {
+          "itemId": "lomo_saltado",
           "quantity": 1
         }
       ]
